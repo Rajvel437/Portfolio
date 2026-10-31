@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Colour tokens as RGB triplets so Tailwind can apply opacity (bg-amber/10). */
+:root {
+  --bg: 13 17 24;
+  --surface: 20 26 36;
+  --surface-2: 27 34 48;
+  --line: 42 51 68;
+  --fg: 230 234 242;
+  --muted: 139 149 168;
+  --amber: 245 165 36;
+  --teal: 79 209 197;
+  --rose: 244 124 138;
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: 244 246 250;
+  --surface: 255 255 255;
+  --surface-2: 235 239 245;
+  --line: 213 220 231;
+  --fg: 18 23 34;
+  --muted: 90 101 120;
+  --amber: 178 106 0;
+  --teal: 15 138 128;
+  --rose: 194 54 74;
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  @apply bg-bg font-sans text-fg antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+::selection {
+  background: rgb(var(--amber) / 0.3);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--teal));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.grid-bg {
+  background-image: linear-gradient(rgb(var(--line) / 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--line) / 0.35) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at 65% 35%, black 10%, transparent 65%);
+}
+
+/* Cursor-following glow on project cards; --mx/--my are set from JS. */
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--amber) / 0.09), transparent 45%);
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 45s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -150% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(100deg, rgb(var(--surface)) 30%, rgb(var(--surface-2)) 50%, rgb(var(--surface)) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 2.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .skeleton {
+    animation: none;
+  }
+}
